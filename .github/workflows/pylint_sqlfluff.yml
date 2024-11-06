@@ -23,4 +23,4 @@ jobs:
     #    pylint $(git ls-files '*.py')
     - name: Analysing the SQL code with sqlfluff
       run: |
-        sqlfluff lint $(git ls-files '*.sql')
+        sqlfluff lint --dialect postgresql $(git ls-files '*.sql')
