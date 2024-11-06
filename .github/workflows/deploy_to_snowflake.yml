@@ -1,0 +1,34 @@
+name: Deploy to Snowflake
+
+on:
+  push:
+    paths:
+      - 'snowflake_config/**'  # Déclenche le workflow pour chaque modification dans le dossier snowflake_config
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-core dbt-snowflake
+
+      - name: Run DBT to deploy changes to Snowflake
+        env:
+          DBT_USER: ${{ secrets.DBT_USER }}
+          DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+          DBT_ACCOUNT: ${{ secrets.DBT_ACCOUNT }}
+          DBT_DATABASE: ${{ secrets.DBT_DATABASE }}
+        run: |
+          cd my_dbt_project
+          dbt deps --profiles-dir .  # Installe les dépendances DBT
+          dbt run --profiles-dir . --target prod  # Exécute les modèles DBT dans Snowflake
