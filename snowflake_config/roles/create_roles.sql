@@ -17,4 +17,3 @@ grant select on future tables in database my_database to role my_role;
 
 -- Mes privilèges
 grant role my_role to user jpthai;
-
