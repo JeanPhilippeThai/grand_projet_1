@@ -22,13 +22,27 @@ jobs:
         run: |
           pip install dbt-core dbt-snowflake
 
+      - name: Create profiles.yml for DBT
+        run: |
+          mkdir -p ~/.dbt
+          echo "
+          my_dbt_project:
+            target: prod
+            outputs:
+              prod:
+                type: snowflake
+                account: '${{ secrets.DBT_ACCOUNT }}'
+                user: '${{ secrets.DBT_USER }}'
+                password: '${{ secrets.DBT_PASSWORD }}'
+                role: 'your_role'  # Remplace par le rôle approprié
+                database: '${{ secrets.DBT_DATABASE }}'
+                warehouse: 'your_warehouse'  # Remplace par l'entrepôt de calcul approprié
+                schema: 'your_schema'  # Remplace par le schéma approprié
+          " > ~/.dbt/profiles.yml
+
       - name: Run DBT to deploy changes to Snowflake
-        env:
-          DBT_USER: ${{ secrets.DBT_USER }}
-          DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
-          DBT_ACCOUNT: ${{ secrets.DBT_ACCOUNT }}
-          DBT_DATABASE: ${{ secrets.DBT_DATABASE }}
         run: |
           cd my_dbt_project
           dbt deps  # Installe les dépendances DBT
           dbt run --target prod  # Exécute les modèles DBT dans Snowflake
+          
