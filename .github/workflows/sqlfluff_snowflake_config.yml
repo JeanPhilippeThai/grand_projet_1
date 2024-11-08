@@ -1,6 +1,9 @@
 name: SQLfluff pour snowflake_config
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'snowflake_config/**'  # Déclenche le workflow pour chaque modification dans le dossier snowflake_config
 
 jobs:
   build:
