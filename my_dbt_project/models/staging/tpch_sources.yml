@@ -4,13 +4,72 @@ sources:
   - name: tpch
     database: snowflake_sample_data
     schema: tpch_sf1
+
     tables:
-      - name: orders
+      - name: region
         columns:
-          - name: o_orderkey
+          - name: r_regionkey
             data_tests:
               - unique
               - not_null
+
+      - name: nation
+        columns:
+          - name: n_nationkey
+            data_tests:
+              - unique
+              - not_null
+          - name: n_regionkey
+            data_tests:
+              - relationships:
+                    to: source('tpch', 'region')
+                    field: r_regionkey
+
+      - name: supplier
+        columns:
+          - name: s_suppkey
+            data_tests:
+              - unique
+              - not_null
+          - name: s_nationkey
+            data_tests:
+              - relationships:
+                    to: source('tpch', 'nation')
+                    field: n_nationkey
+
+      - name: part
+        columns:
+          - name: p_partkey
+            data_tests:
+              - unique
+              - not_null
+
+      - name: customer
+        columns:
+          - name: c_custkey
+            data_tests:
+              - unique
+              - not_null
+          - name: c_nationkey
+            data_tests:
+              - relationships:
+                    to: source('tpch', 'nation')
+                    field: n_nationkey
+      
+      - name: partsupp
+        columns:
+          - name: ps_partkey
+            data_tests:
+              - not_null
+              - relationships:
+                    to: source('tpch', 'part')
+                    field: p_partkey
+          - name: ps_suppkey
+            data_tests:
+              - not_null
+              - relationships:
+                    to: source('tpch', 'supplier')
+                    field: s_suppkey
 
       - name: lineitem
         columns:
@@ -19,3 +78,28 @@ sources:
               - relationships:
                   to: source('tpch', 'orders')
                   field: o_orderkey
+          - name: l_partkey
+            data_tests:
+              - not_null
+              - relationships:
+                    to: source('tpch', 'partsupp')
+                    field: ps_partkey
+          - name: l_suppkey
+            data_tests:
+              - not_null
+              - relationships:
+                    to: source('tpch', 'partsupp')
+                    field: ps_suppkey
+
+      - name: orders
+        columns:
+          - name: o_orderkey
+            data_tests:
+              - unique
+              - not_null
+          - name: o_custkey
+            data_tests:
+              - not_null
+              - relationships:
+                  to: source('tpch', 'customer')
+                  field: c_custkey
