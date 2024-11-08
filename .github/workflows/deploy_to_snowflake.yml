@@ -4,7 +4,8 @@ on:
   push:
     paths:
       - 'snowflake_config/**'  # Déclenche le workflow pour chaque modification dans le dossier snowflake_config
-
+      - 'my_dbt_project/**'    # Idem pour my_dbt_project
+      
 jobs:
   deploy:
     runs-on: ubuntu-latest
