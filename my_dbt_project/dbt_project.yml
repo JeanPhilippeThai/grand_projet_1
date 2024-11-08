@@ -37,3 +37,4 @@ models:
       snowflake_warehouse: my_warehouse
     marts:
       +materialized: table
+      snowflake_warehouse: my_warehouse
