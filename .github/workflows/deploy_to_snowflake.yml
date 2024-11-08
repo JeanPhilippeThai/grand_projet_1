@@ -35,10 +35,10 @@ jobs:
                 account: '${{ secrets.DBT_ACCOUNT }}'
                 user: '${{ secrets.DBT_USER }}'
                 password: '${{ secrets.DBT_PASSWORD }}'
-                role: 'your_role'  # Remplace par le rôle approprié
+                role: '${{ secrets.DBT_ROLE }}'
                 database: '${{ secrets.DBT_DATABASE }}'
-                warehouse: 'your_warehouse'  # Remplace par l'entrepôt de calcul approprié
-                schema: 'your_schema'  # Remplace par le schéma approprié
+                warehouse: '${{ secrets.DBT_WAREHOUSE }}'
+                schema: '${{ secrets.DBT_SCHEMA }}'
           " > ~/.dbt/profiles.yml
 
       - name: Run DBT to deploy changes to Snowflake
